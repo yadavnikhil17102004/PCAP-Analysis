@@ -1,0 +1,6 @@
+scapy
+whois
+dnspython
+ipwhois
+requests
+ipwhois

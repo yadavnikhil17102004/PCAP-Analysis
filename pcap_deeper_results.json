@@ -1,0 +1,264 @@
+{
+  "packets_total": 16,
+  "dns": [
+    {
+      "time": "1431031896.723375",
+      "src": "192.168.138.158",
+      "dst": "192.168.138.2",
+      "id": 18350,
+      "qr": 0,
+      "qdcount": 1,
+      "ancount": 0,
+      "rcode": 0,
+      "qname": "va872g.g90e1h.b8.642b63u.j985a2.v33e.37.pa269cc.e8mfzdgrf7g0.groupprograms.in",
+      "qtype": 1,
+      "answers": []
+    },
+    {
+      "time": "1431031896.874326",
+      "src": "192.168.138.2",
+      "dst": "192.168.138.158",
+      "id": 18350,
+      "qr": 1,
+      "qdcount": 1,
+      "ancount": 1,
+      "rcode": 0,
+      "qname": "va872g.g90e1h.b8.642b63u.j985a2.v33e.37.pa269cc.e8mfzdgrf7g0.groupprograms.in",
+      "qtype": 1,
+      "answers": [
+        {
+          "rrname": "va872g.g90e1h.b8.642b63u.j985a2.v33e.37.pa269cc.e8mfzdgrf7g0.groupprograms.in",
+          "type": 1,
+          "rdata": "62.75.195.236"
+        }
+      ]
+    },
+    {
+      "time": "1431031897.512327",
+      "src": "192.168.138.158",
+      "dst": "192.168.138.2",
+      "id": 27248,
+      "qr": 0,
+      "qdcount": 1,
+      "ancount": 0,
+      "rcode": 0,
+      "qname": "ubb67.3c147o.u806a4.w07d919.o5f.f1.b80w.r0faf9.e8mfzdgrf7g0.groupprograms.in",
+      "qtype": 1,
+      "answers": []
+    },
+    {
+      "time": "1431031897.512469",
+      "src": "192.168.138.158",
+      "dst": "192.168.138.2",
+      "id": 62139,
+      "qr": 0,
+      "qdcount": 1,
+      "ancount": 0,
+      "rcode": 0,
+      "qname": "r03afd2.c3008e.xc07r.b0f.a39.h7f0fa5eu.vb8fbl.e8mfzdgrf7g0.groupprograms.in",
+      "qtype": 1,
+      "answers": []
+    },
+    {
+      "time": "1431031897.655926",
+      "src": "192.168.138.2",
+      "dst": "192.168.138.158",
+      "id": 27248,
+      "qr": 1,
+      "qdcount": 1,
+      "ancount": 1,
+      "rcode": 0,
+      "qname": "ubb67.3c147o.u806a4.w07d919.o5f.f1.b80w.r0faf9.e8mfzdgrf7g0.groupprograms.in",
+      "qtype": 1,
+      "answers": [
+        {
+          "rrname": "ubb67.3c147o.u806a4.w07d919.o5f.f1.b80w.r0faf9.e8mfzdgrf7g0.groupprograms.in",
+          "type": 1,
+          "rdata": "62.75.195.236"
+        }
+      ]
+    },
+    {
+      "time": "1431031897.669844",
+      "src": "192.168.138.2",
+      "dst": "192.168.138.158",
+      "id": 62139,
+      "qr": 1,
+      "qdcount": 1,
+      "ancount": 1,
+      "rcode": 0,
+      "qname": "r03afd2.c3008e.xc07r.b0f.a39.h7f0fa5eu.vb8fbl.e8mfzdgrf7g0.groupprograms.in",
+      "qtype": 1,
+      "answers": [
+        {
+          "rrname": "r03afd2.c3008e.xc07r.b0f.a39.h7f0fa5eu.vb8fbl.e8mfzdgrf7g0.groupprograms.in",
+          "type": 1,
+          "rdata": "62.75.195.236"
+        }
+      ]
+    },
+    {
+      "time": "1431031902.637356",
+      "src": "192.168.138.158",
+      "dst": "192.168.138.2",
+      "id": 15553,
+      "qr": 0,
+      "qdcount": 1,
+      "ancount": 0,
+      "rcode": 0,
+      "qname": "ip-addr.es",
+      "qtype": 1,
+      "answers": []
+    },
+    {
+      "time": "1431031902.778136",
+      "src": "192.168.138.2",
+      "dst": "192.168.138.158",
+      "id": 15553,
+      "qr": 1,
+      "qdcount": 1,
+      "ancount": 1,
+      "rcode": 0,
+      "qname": "ip-addr.es",
+      "qtype": 1,
+      "answers": [
+        {
+          "rrname": "ip-addr.es",
+          "type": 1,
+          "rdata": "188.165.164.184"
+        }
+      ]
+    },
+    {
+      "time": "1431031903.052371",
+      "src": "192.168.138.158",
+      "dst": "192.168.138.2",
+      "id": 23625,
+      "qr": 0,
+      "qdcount": 1,
+      "ancount": 0,
+      "rcode": 0,
+      "qname": "runlove.us",
+      "qtype": 1,
+      "answers": []
+    },
+    {
+      "time": "1431031903.089942",
+      "src": "192.168.138.2",
+      "dst": "192.168.138.158",
+      "id": 23625,
+      "qr": 1,
+      "qdcount": 1,
+      "ancount": 1,
+      "rcode": 0,
+      "qname": "runlove.us",
+      "qtype": 1,
+      "answers": [
+        {
+          "rrname": "runlove.us",
+          "type": 1,
+          "rdata": "204.152.254.221"
+        }
+      ]
+    },
+    {
+      "time": "1431031903.289815",
+      "src": "192.168.138.158",
+      "dst": "192.168.138.2",
+      "id": 6088,
+      "qr": 0,
+      "qdcount": 1,
+      "ancount": 0,
+      "rcode": 0,
+      "qname": "kritischerkonsum.uni-koeln.de",
+      "qtype": 1,
+      "answers": []
+    },
+    {
+      "time": "1431031903.474197",
+      "src": "192.168.138.2",
+      "dst": "192.168.138.158",
+      "id": 6088,
+      "qr": 1,
+      "qdcount": 1,
+      "ancount": 0,
+      "rcode": 0,
+      "qname": "kritischerkonsum.uni-koeln.de",
+      "qtype": 1,
+      "answers": []
+    },
+    {
+      "time": "1431031903.475416",
+      "src": "192.168.138.158",
+      "dst": "192.168.138.2",
+      "id": 41589,
+      "qr": 0,
+      "qdcount": 1,
+      "ancount": 0,
+      "rcode": 0,
+      "qname": "comarksecurity.com",
+      "qtype": 1,
+      "answers": []
+    },
+    {
+      "time": "1431031903.507883",
+      "src": "192.168.138.2",
+      "dst": "192.168.138.158",
+      "id": 41589,
+      "qr": 1,
+      "qdcount": 1,
+      "ancount": 1,
+      "rcode": 0,
+      "qname": "comarksecurity.com",
+      "qtype": 1,
+      "answers": [
+        {
+          "rrname": "comarksecurity.com",
+          "type": 1,
+          "rdata": "72.34.49.86"
+        }
+      ]
+    },
+    {
+      "time": "1431031941.332372",
+      "src": "192.168.138.158",
+      "dst": "192.168.138.2",
+      "id": 5810,
+      "qr": 0,
+      "qdcount": 1,
+      "ancount": 0,
+      "rcode": 0,
+      "qname": "7oqnsnzwwnm6zb7y.gigapaysun.com",
+      "qtype": 1,
+      "answers": []
+    },
+    {
+      "time": "1431031941.364104",
+      "src": "192.168.138.2",
+      "dst": "192.168.138.158",
+      "id": 5810,
+      "qr": 1,
+      "qdcount": 1,
+      "ancount": 1,
+      "rcode": 0,
+      "qname": "7oqnsnzwwnm6zb7y.gigapaysun.com",
+      "qtype": 1,
+      "answers": [
+        {
+          "rrname": "7oqnsnzwwnm6zb7y.gigapaysun.com",
+          "type": 1,
+          "rdata": "95.163.121.204"
+        }
+      ]
+    }
+  ],
+  "suspicious_slds": {
+    "comarksecurity.com": {
+      "a_records": [],
+      "ns_records": [],
+      "whois": {
+        "error": "module 'whois' has no attribute 'whois'"
+      }
+    }
+  }
+}
