@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<wireshark_color_filter_file version="1.0">
+  <color_filter name="DGA - groupprograms.in" str='dns.qry.name contains "groupprograms.in"' fg_color="ffff00" bg_color="cc0000"/>
+  <color_filter name="DGA - gigapaysun.com"   str='dns.qry.name contains "gigapaysun.com"'   fg_color="ffff00" bg_color="cc0000"/>
+  <color_filter name="Suspicious C2 IP"       str='ip.addr == 95.163.121.204 || ip.addr == 62.75.195.236' fg_color="000000" bg_color="ff6600"/>
+</wireshark_color_filter_file>
