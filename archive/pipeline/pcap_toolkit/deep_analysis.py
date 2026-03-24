@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 import dns.resolver
 import whois
@@ -143,6 +144,7 @@ def run_deep_analysis(pcap_path, out_json=None):
         results["suspicious_slds"][top_domain] = enrichment
 
     if out_json:
+        Path(out_json).parent.mkdir(parents=True, exist_ok=True)
         with open(out_json, "w", encoding="utf-8") as handle:
             json.dump(results, handle, indent=2, ensure_ascii=False, default=lambda value: str(value))
 

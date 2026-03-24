@@ -179,10 +179,12 @@ def run_ip_enrichment(in_json, out_json=None, out_md=None, max_workers=8, timeou
     }
 
     if out_json:
+        Path(out_json).parent.mkdir(parents=True, exist_ok=True)
         with open(out_json, "w", encoding="utf-8") as handle:
             json.dump(results, handle, indent=2, ensure_ascii=False)
 
     if out_md:
+        Path(out_md).parent.mkdir(parents=True, exist_ok=True)
         with open(out_md, "w", encoding="utf-8") as handle:
             handle.write(build_markdown_report(results))
 

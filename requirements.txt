@@ -4,3 +4,6 @@ dnspython
 ipwhois
 requests
 ipwhois
+streamlit
+plotly
+pandas

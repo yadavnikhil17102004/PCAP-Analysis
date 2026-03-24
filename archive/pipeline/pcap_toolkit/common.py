@@ -16,14 +16,33 @@ def default_pcap_path(script_file):
 
 def default_deep_results_input(script_file):
     base = Path(script_file).resolve().parent
-    local_json = base / "pcap_deeper_results.json"
-    if local_json.exists():
-        return str(local_json)
+    candidates = [
+        base / "outputs" / "pcap_deeper_results.json",
+        base / "pcap_deeper_results.json",
+    ]
+    for local_json in candidates:
+        if local_json.exists():
+            return str(local_json)
     return LEGACY_DEEP_JSON_PATH
 
 
 def default_output_path(script_file, filename):
-    return str(Path(script_file).resolve().parent / filename)
+    base = Path(script_file).resolve().parent
+    outputs_dir = base / "outputs"
+    outputs_dir.mkdir(parents=True, exist_ok=True)
+    return str(outputs_dir / filename)
+
+
+def default_enrichment_results_input(script_file):
+    base = Path(script_file).resolve().parent
+    candidates = [
+        base / "outputs" / "ip_enrichment_results.json",
+        base / "ip_enrichment_results.json",
+    ]
+    for local_json in candidates:
+        if local_json.exists():
+            return str(local_json)
+    return str(base / "outputs" / "ip_enrichment_results.json")
 
 
 def entropy(text):
