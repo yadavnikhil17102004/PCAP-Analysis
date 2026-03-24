@@ -1,33 +1,75 @@
-# PCAP Analysis Toolkit
+# 📡 PCAP Investigation Console
 
-Sequential DNS-focused investigation pipeline for PCAP triage, enrichment, and reporting.
+A **signal-first**, Python-based threat hunting dashboard for PCAP analysis. Detects **DNS tunneling**, **DGA domains**, **Beaconing C2 callbacks**, and **Geo-distributed infrastructure**.
 
-## What Is Active
+[![Watch the Demo](assets/demo/Screen_Recording.mov)](assets/demo/Screen_Recording.mov)
 
-### Dashboard runtime (current active mode)
-- `dashboard.py`: root launcher, keeps command `streamlit run dashboard.py` working.
-- `dashboard_app/dashboard.py`: main Streamlit investigation app.
-- `dashboard_app/RUNTIME_REQUIRED.md`: exact runtime file list.
+---
 
-### Wireshark integration
-- `wireshark/dga_dns_postdissector.lua`
-- `wireshark/dga_coloring.xml`
-- `wireshark/README.md`
+## 🚀 Key Features
 
-## Repository Layout
+| Feature | Description |
+| :--- | :--- |
+| **DGA Detection** | Real-time heuristic scoring (Entropy + Consonant Ratio + Label Count). |
+| **Beacon Analysis** | Identifies periodic `C2` callbacks using jitter analysis (CV < 0.30). |
+| **Threat Intelligence** | Auto-enrichment with **GeoIP**, **ASN**, and **MITRE ATT&CK** mapping. |
+| **Interactive Timeline** | Zoomable scatter plot of DNS query entropy over time. |
+| **Full Pipeline in Browser** | **Upload .pcap files directly** to analyze without touching the CLI. |
+| **IOC Export** | One-click export to **CSV**, **Sigma Rules**, and **Suricata Rules**. |
 
-- `Evidence.pcap`: sample input (not required for dashboard-only mode).
-- `outputs/`: generated pipeline artifacts (active output location).
-- `final_report.md`: standalone narrative report/reference.
-- `plan.md`: roadmap notes.
-- `archive/pipeline/`: archived pipeline Python source.
+---
 
-The repository root should mainly contain source and entry scripts. Generated artifacts are written under `outputs/` by default.
+## 🛠 Installation
 
-## Setup
+Start by cloning the repository and setting up the environment:
 
 ```bash
+# 1. Clone the repository
+git clone https://github.com/yourusername/PCAP-Analysis.git
+cd PCAP-Analysis
+
+# 2. Create a virtual environment
 python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# 3. Install dependencies
+pip install -r requirements.txt
+```
+
+## 🖥 Usage
+
+Run the dashboard with a single command:
+
+```bash
+streamlit run dashboard.py
+```
+
+### Analysis Modes
+1.  **Upload PCAP**: Drag & drop any `.pcap` or `.pcapng` file. The dashboard runs the full analysis pipeline in the background.
+2.  **Auto-detect**: Loads pre-processed JSONs from the `outputs/` directory (great for sharing results).
+
+
+## 📂 Project Structure
+
+```bash
+.
+├── dashboard.py           # Launcher (Start here)
+├── dashboard_app/         # Dashboard Source Code
+│   └── dashboard.py       # Main Application Logic
+├── archive/pipeline/      # Backend Analysis Engine
+│   ├── pcap_deep_analysis.py  # DGA parser
+│   └── ip_enrichment.py       # GeoIP/RDAP enricher
+├── outputs/               # Analysis Artifacts (JSONs)
+├── assets/                # Demo & Media
+└── Evidence.pcap          # Sample Capture File
+```
+
+## 🛡 Validated Against
+- **Python 3.10+**
+- **Streamlit 1.30+**
+- **MacOS / Linux / Windows**
+
+> **Note**: For best performance with large PCAPs (>100MB), run the backend scripts manually from `archive/pipeline/` and load the JSONs.
 source venv/bin/activate
 pip install -r requirements.txt
 ```
