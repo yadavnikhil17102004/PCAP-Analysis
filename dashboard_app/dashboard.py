@@ -45,6 +45,13 @@ def _find_candidates(filename: str) -> list[str]:
     return list(dict.fromkeys(paths))
 
 
+def _bundled_example_paths() -> tuple[str, str]:
+    root = Path(__file__).resolve().parents[1]
+    deep = root / 'outputs' / 'pcap_deeper_results.json'
+    enrich = root / 'outputs' / 'ip_enrichment_results.json'
+    return str(deep), str(enrich)
+
+
 def _run_pipeline(pcap_path: str, output_dir: str):
     """Run the analysis pipeline on a PCAP file."""
     base = Path(__file__).resolve().parent.parent
@@ -1173,7 +1180,7 @@ def section_setup() -> tuple[bool, str, str]:
         unsafe_allow_html=True,
     )
 
-    mode = st.radio('Load mode', ['Auto-detect', 'Upload PCAP', 'Custom paths'], horizontal=True)
+    mode = st.radio('Load mode', ['Demo example', 'Auto-detect', 'Upload PCAP', 'Custom paths'], horizontal=True)
     left, right = st.columns([1.35, 0.95], vertical_alignment='top')
 
     dp = ''
@@ -1181,11 +1188,16 @@ def section_setup() -> tuple[bool, str, str]:
     clicked = False
 
     with left:
-        if mode == 'Auto-detect':
+        if mode == 'Demo example':
+            dp, ep = _bundled_example_paths()
+            st.success('Bundled demo data selected. This is the fastest way to see the dashboard.')
+            st.caption('Uses the committed sample outputs in /outputs so the app works even on fresh deployments.')
+            clicked = st.button('Load demo', type='primary', use_container_width=True)
+        elif mode == 'Auto-detect':
             d_opts = _find_candidates('pcap_deeper_results.json')
             e_opts = _find_candidates('ip_enrichment_results.json')
-            dp = st.selectbox('Analysis JSON', d_opts or ['pcap_deeper_results.json'])
-            ep = st.selectbox('Enrichment JSON', e_opts or ['ip_enrichment_results.json'])
+            dp = st.selectbox('Analysis JSON', d_opts or [str(Path(_bundled_example_paths()[0]))])
+            ep = st.selectbox('Enrichment JSON', e_opts or [str(Path(_bundled_example_paths()[1]))])
             clicked = st.button('Start triage', type='primary', use_container_width=True)
         elif mode == 'Upload PCAP':
             uploaded = st.file_uploader('Select .pcap file', type=['pcap', 'pcapng'])
@@ -1209,8 +1221,8 @@ def section_setup() -> tuple[bool, str, str]:
         else:
             d_opts = _find_candidates('pcap_deeper_results.json')
             e_opts = _find_candidates('ip_enrichment_results.json')
-            dp = st.text_input('Analysis JSON path', value=d_opts[0] if d_opts else 'pcap_deeper_results.json')
-            ep = st.text_input('Enrichment JSON path', value=e_opts[0] if e_opts else 'ip_enrichment_results.json')
+            dp = st.text_input('Analysis JSON path', value=d_opts[0] if d_opts else _bundled_example_paths()[0])
+            ep = st.text_input('Enrichment JSON path', value=e_opts[0] if e_opts else _bundled_example_paths()[1])
             clicked = st.button('Start triage', type='primary', use_container_width=True)
 
     with right:
@@ -1225,6 +1237,17 @@ def section_setup() -> tuple[bool, str, str]:
                 </div>
                 <div class="workspace-note" style="margin-top:10px;color:#94a3b8">
                     Good fit for noisy DNS captures, DGA hunting, and quick IOC export.
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            """
+            <div class="status-rail" style="padding:16px 16px 12px 16px;margin-top:12px;">
+                <div class="workspace-kicker">Included example</div>
+                <div class="workspace-note" style="margin-top:8px">
+                    The repo ships with sample analysis JSONs under <b>/outputs</b> so the dashboard can open with a real demo dataset immediately.
                 </div>
             </div>
             """,

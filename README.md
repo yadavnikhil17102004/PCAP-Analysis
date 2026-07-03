@@ -86,6 +86,29 @@ Default expected files:
 
 You can also provide custom JSON paths from the app setup panel.
 
+## Faster Testing Without the UI
+
+Use the smoke-test helper to pull curated PCAP fixtures from `markofu/pcaps`, run the deep-analysis pipeline, and optionally run enrichment + dashboard parsing.
+
+```bash
+# See the built-in fixture catalog
+venv/bin/python scripts/pcap_smoke.py --list
+
+# Fast path: mixed protocol coverage
+venv/bin/python scripts/pcap_smoke.py --sample dns --sample http --sample ftp --sample telnet --sample portscan
+
+# Full path: includes enrichment and markdown report generation
+venv/bin/python scripts/pcap_smoke.py --sample dns --sample ftp --full
+```
+
+Built-in fixtures now cover a lot more than DNS-only captures:
+- DNS, HTTP, FTP, Telnet
+- Port scan / ICMP / DHCP / ARP
+- Email trouble, Gnutella, Blaster
+- Optional heavier samples like `slowdownload` and `80211traffic`
+
+Outputs land in `.cache/pcap-smoke/` so you can inspect the generated JSON/MD files later.
+
 ## Launch Dashboard
 
 ```bash
