@@ -1,0 +1,57 @@
+commit 0c9ef82ba604e8b473d2cd3c6aa683bcb7fb56e4
+Author:     vaishu-2805 <ahervaishnavi28@gmail.com>
+AuthorDate: Thu Mar 26 22:09:25 2026 +0530
+Commit:     vaishu-2805 <ahervaishnavi28@gmail.com>
+CommitDate: Thu Mar 26 22:09:25 2026 +0530
+
+    feat: Add comprehensive tests and performance metrics for PCAP analysis pipeline
+    
+    - Introduced large test PCAP file and corresponding output JSON files for IP enrichment and deeper analysis.
+    - Implemented final validation test script to ensure dashboard functionality with large datasets.
+    - Created performance results script to summarize processing metrics and optimizations.
+    - Developed comprehensive test suite for dashboard functions, including IP DataFrame building and geo mapping.
+    - Added integration tests to verify dashboard imports and function signatures.
+    - Ensured all tests pass for both enriched IP data and geo mapping logic.
+
+ DASHBOARD_MULTITHREADING_GUIDE.md                  | 230 ++++++++++++++
+ LARGE_FILE_TEST_REPORT.md                          | 185 +++++++++++
+ MULTITHREADING_IMPROVEMENTS.md                     |  74 ++++-
+ PERFORMANCE_OPTIMIZATION.md                        | 196 ++++++++++++
+ PERFORMANCE_TEST_RESULTS.md                        |  84 +++++
+ PROJECT_COMPLETION_SUMMARY.md                      | 340 +++++++++++++++++++++
+ archive/pipeline/Evidence.pcap                     | Bin 0 -> 2060 bytes
+ archive/pipeline/ip_enrichment.py                  |   8 +-
+ archive/pipeline/large_test.pcap                   | Bin 0 -> 52696108 bytes
+ archive/pipeline/outputs/analysis_report.md        | Bin 4473 -> 30117 bytes
+ .../pipeline/outputs/ip_enrichment_results.json    | 251 +++++++++++++++
+ archive/pipeline/outputs/pcap_deeper_results.json  | 262 ++++++++++++++++
+ archive/pipeline/pcap_analysis.py                  |   4 +-
+ archive/pipeline/pcap_deep_analysis.py             |   4 +-
+ archive/pipeline/pcap_toolkit/analysis.py          |   4 +
+ archive/pipeline/pcap_toolkit/deep_analysis.py     |  18 +-
+ archive/pipeline/pcap_toolkit/enrichment.py        |  22 +-
+ dashboard_app/dashboard.py                         | 336 ++++++++++++++------
+ final_validation_test.py                           | 126 ++++++++
+ outputs/analysis_report.md                         |  26 +-
+ outputs/ip_enrichment_results.json                 |  93 +++---
+ outputs/pcap_deeper_results.json                   |   4 +-
+ requirements.txt                                   |   3 +-
+ show_performance_results.py                        | 104 +++++++
+ test_dashboard_comprehensive.py                    | 133 ++++++++
+ test_dashboard_fixes.py                            |  79 +++++
+ test_dashboard_integration.py                      |  48 +++
+ 27 files changed, 2423 insertions(+), 211 deletions(-)
+ create mode 100644 DASHBOARD_MULTITHREADING_GUIDE.md
+ create mode 100644 LARGE_FILE_TEST_REPORT.md
+ create mode 100644 PERFORMANCE_OPTIMIZATION.md
+ create mode 100644 PERFORMANCE_TEST_RESULTS.md
+ create mode 100644 PROJECT_COMPLETION_SUMMARY.md
+ create mode 100644 archive/pipeline/Evidence.pcap
+ create mode 100644 archive/pipeline/large_test.pcap
+ create mode 100644 archive/pipeline/outputs/ip_enrichment_results.json
+ create mode 100644 archive/pipeline/outputs/pcap_deeper_results.json
+ create mode 100644 final_validation_test.py
+ create mode 100644 show_performance_results.py
+ create mode 100644 test_dashboard_comprehensive.py
+ create mode 100644 test_dashboard_fixes.py
+ create mode 100644 test_dashboard_integration.py

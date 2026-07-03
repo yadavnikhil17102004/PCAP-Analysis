@@ -1,0 +1,18 @@
+commit 6ed8d72b036a944ae516fe8640fbef79b4685848
+Author:     vaishu-2805 <ahervaishnavi28@gmail.com>
+AuthorDate: Thu Mar 26 14:23:39 2026 +0530
+Commit:     vaishu-2805 <ahervaishnavi28@gmail.com>
+CommitDate: Thu Mar 26 14:23:39 2026 +0530
+
+    feat: implement multithreading support for enhanced performance in PCAP analysis pipeline
+
+ MULTITHREADING_IMPROVEMENTS.md                 | 135 ++++++++++++++
+ archive/pipeline/outputs/analysis_report.md    |  20 +--
+ archive/pipeline/pcap_analysis.py              |   8 +-
+ archive/pipeline/pcap_deep_analysis.py         |   8 +-
+ archive/pipeline/pcap_toolkit/analysis.py      | 118 +++++++-----
+ archive/pipeline/pcap_toolkit/deep_analysis.py |  58 ++++--
+ dashboard_app/dashboard.py                     | 237 ++++++++++++++++++++++++-
+ requirements.txt                               |   2 +-
+ 8 files changed, 507 insertions(+), 79 deletions(-)
+ create mode 100644 MULTITHREADING_IMPROVEMENTS.md

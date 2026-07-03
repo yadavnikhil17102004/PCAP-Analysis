@@ -54,10 +54,12 @@ streamlit run dashboard.py
 ```bash
 .
 ├── dashboard.py           # Launcher (Start here)
-├── dashboard_app/         # Dashboard Source Code
-│   └── dashboard.py       # Main Application Logic
-├── archive/pipeline/      # Backend Analysis Engine
-│   ├── pcap_deep_analysis.py  # DGA parser
+├── dashboard_app/         # Dashboard source code
+│   ├── dashboard.py       # Main Streamlit application
+│   ├── analysis.py        # DGA scoring, beaconing, and data frames
+│   └── exports.py         # IOC / Sigma / Suricata export helpers
+├── archive/pipeline/      # Backend analysis engine
+│   ├── pcap_deep_analysis.py  # PCAP parsing / DGA inputs
 │   └── ip_enrichment.py       # GeoIP/RDAP enricher
 ├── outputs/               # Analysis Artifacts (JSONs)
 ├── assets/                # Demo & Media
@@ -70,6 +72,8 @@ streamlit run dashboard.py
 - **MacOS / Linux / Windows**
 
 > **Note**: For best performance with large PCAPs (>100MB), run the backend scripts manually from `archive/pipeline/` and load the JSONs.
+
+```bash
 source venv/bin/activate
 pip install -r requirements.txt
 ```

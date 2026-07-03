@@ -6,6 +6,10 @@
   - Root launcher for Streamlit command compatibility.
 - `dashboard_app/dashboard.py`
   - Main Streamlit investigation console.
+- `dashboard_app/analysis.py`
+  - DGA scoring, beacon detection, and DataFrame builders.
+- `dashboard_app/exports.py`
+  - IOC, Sigma, and Suricata export helpers.
 - `dashboard_app/RUNTIME_REQUIRED.md`
   - Runtime dependency manifest for dashboard mode.
 - `wireshark/`
