@@ -216,7 +216,7 @@ def main() -> int:
     else:
         selected = ["dns", "http"]
 
-    out_root = Path(args.output_dir)
+    out_root = Path(args.output_dir).expanduser().resolve()
     out_root.mkdir(parents=True, exist_ok=True)
 
     print(f"Fixture repo: {args.repo}@{args.branch}")
