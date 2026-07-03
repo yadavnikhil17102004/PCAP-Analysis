@@ -7,6 +7,11 @@ from scapy.layers.inet import TCP
 from pcap_toolkit.common import entropy
 
 
+HOST_HEADER_PATTERN = re.compile(br"Host:\s*([^\r\n]+)")
+ASCII_DOMAIN_PATTERN = re.compile(rb"[a-zA-Z0-9][-a-zA-Z0-9\.]{2,}\.[a-zA-Z]{2,}")
+IPV4_PATTERN = re.compile(r"^\d+\.\d+\.\d+\.\d+$")
+
+
 def analyze_pcap(pcap_path):
     packets = rdpcap(pcap_path)
 
@@ -38,18 +43,19 @@ def analyze_pcap(pcap_path):
                 payload = bytes(pkt[Raw].load)
                 try:
                     if b"Host:" in payload:
-                        host_match = re.search(br"Host:\s*([^\r\n]+)", payload)
+                        host_match = HOST_HEADER_PATTERN.search(payload)
                         if host_match:
                             hosts_http.add(host_match.group(1).decode(errors="ignore").strip())
                 except Exception:
                     pass
 
                 try:
-                    ascii_domains = re.findall(rb"[a-zA-Z0-9][-a-zA-Z0-9\.]{2,}\.[a-zA-Z]{2,}", payload)
-                    for candidate in ascii_domains:
-                        domain = candidate.decode(errors="ignore")
-                        if not re.match(r"\d+\.\d+\.\d+\.\d+", domain):
-                            sni_tls.add(domain)
+                    if b"." in payload:
+                        ascii_domains = ASCII_DOMAIN_PATTERN.findall(payload)
+                        for candidate in ascii_domains:
+                            domain = candidate.decode(errors="ignore")
+                            if not IPV4_PATTERN.match(domain):
+                                sni_tls.add(domain)
                 except Exception:
                     pass
         except Exception:
