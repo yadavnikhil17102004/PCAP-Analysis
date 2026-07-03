@@ -24,6 +24,7 @@ from dashboard_app.analysis import (
     detect_beacons,
 )
 from dashboard_app.exports import export_ioc_csv, export_sigma, export_suricata
+from utils.pcap_guard import check_pcap_size
 
 
 @st.cache_data(show_spinner=False)
@@ -1203,18 +1204,24 @@ def section_setup() -> tuple[bool, str, str]:
             uploaded = st.file_uploader('Select .pcap file', type=['pcap', 'pcapng'])
             clicked = st.button('Process & Load', type='primary', use_container_width=True)
             if clicked and uploaded:
-                with st.spinner('Processing PCAP pipeline (analysis + enrichment)...'):
-                    try:
-                        tmp_dir = tempfile.mkdtemp(prefix='pcap_dash_')
-                        pcap_path = os.path.join(tmp_dir, uploaded.name)
-                        with open(pcap_path, 'wb') as f:
-                            f.write(uploaded.getbuffer())
-                        dp, ep = _run_pipeline(pcap_path, tmp_dir)
-                        st.success('Analysis complete. Loaded generated JSONs from temp.')
-                    except subprocess.CalledProcessError as exc:
-                        st.error('Analysis pipeline failed. Check console logs.')
-                        st.code(str(exc))
-                        clicked = False
+                is_safe, size_mb, message = check_pcap_size(uploaded)
+                if not is_safe:
+                    st.error(message)
+                    clicked = False
+                else:
+                    st.caption(message)
+                    with st.spinner('Processing PCAP pipeline (analysis + enrichment)...'):
+                        try:
+                            tmp_dir = tempfile.mkdtemp(prefix='pcap_dash_')
+                            pcap_path = os.path.join(tmp_dir, Path(uploaded.name).name or 'upload.pcap')
+                            with open(pcap_path, 'wb') as f:
+                                f.write(uploaded.getbuffer())
+                            dp, ep = _run_pipeline(pcap_path, tmp_dir)
+                            st.success('Analysis complete. Loaded generated JSONs from temp.')
+                        except subprocess.CalledProcessError as exc:
+                            st.error('Analysis pipeline failed. Check console logs.')
+                            st.code(str(exc))
+                            clicked = False
             elif clicked and not uploaded:
                 st.warning('Please upload a file first.')
                 clicked = False

@@ -1,8 +1,12 @@
 import argparse
 import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from pcap_toolkit.common import default_output_path, default_pcap_path
 from pcap_toolkit.deep_analysis import run_deep_analysis
+from utils.pcap_guard import check_pcap_size
 
 
 def parse_args():
@@ -22,6 +26,11 @@ def parse_args():
 
 def main():
     args = parse_args()
+    is_safe, size_mb, message = check_pcap_size(args.pcap)
+    if not is_safe:
+        print(message, file=sys.stderr)
+        return 2
+
     try:
         results = run_deep_analysis(args.pcap, out_json=args.out_json)
     except Exception as exc:
