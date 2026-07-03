@@ -46,7 +46,7 @@ streamlit run dashboard.py
 
 ## Performance
 
-Benchmarked on Intel(R) Core(TM) i7-8750H CPU @ 2.20GHz, 17179869184 bytes RAM, synthetic PCAPs, `analyze_pcap()` light path.
+Benchmarked on Intel(R) Core(TM) i7-8750H CPU @ 2.20GHz, 16 GiB RAM, synthetic PCAPs, `analyze_pcap()` light path.
 
 | File Size | Parse Time | Peak RSS |
 |-----------|-----------|----------|
@@ -55,6 +55,8 @@ Benchmarked on Intel(R) Core(TM) i7-8750H CPU @ 2.20GHz, 17179869184 bytes RAM, 
 | 75 MB     | 17.903s   | 644.26 MiB |
 | 100 MB    | 23.169s   | 833.92 MiB |
 | 150 MB    | 38.931s   | 1213.60 MiB |
+
+> Note: these figures cover `analyze_pcap()` only. The live Streamlit dashboard uses the deep-analysis + enrichment pipeline, which is not yet benchmarked — see IP enrichment constraint below.
 
 Optimization note: commit `74ede43` removed a per-packet regex hotspot by precompiling regex patterns and prefiltering payload scans (`b"." in payload`) before domain extraction. This reduced `analyze_pcap()` runtime by ~16x on the 25MB benchmark while preserving output parity on reference captures.
 
