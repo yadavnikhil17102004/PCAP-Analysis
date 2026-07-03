@@ -44,6 +44,27 @@ Run the dashboard with a single command:
 streamlit run dashboard.py
 ```
 
+## Performance
+
+Benchmarked on Intel(R) Core(TM) i7-8750H CPU @ 2.20GHz, 16 GiB RAM, synthetic PCAPs, `analyze_pcap()` light path.
+
+| File Size | Parse Time | Peak RSS |
+|-----------|-----------|----------|
+| 25 MB     | 5.666s    | 264.45 MiB |
+| 50 MB     | 11.501s   | 454.39 MiB |
+| 75 MB     | 17.903s   | 644.26 MiB |
+| 100 MB    | 23.169s   | 833.92 MiB |
+| 150 MB    | 38.931s   | 1213.60 MiB |
+
+> Note: these figures cover `analyze_pcap()` only. The live Streamlit dashboard uses the deep-analysis + enrichment pipeline, which is not yet benchmarked — see IP enrichment constraint below.
+
+Optimization note: commit `74ede43` removed a per-packet regex hotspot by precompiling regex patterns and prefiltering payload scans (`b"." in payload`) before domain extraction. This reduced `analyze_pcap()` runtime by ~16x on the 25MB benchmark while preserving output parity on reference captures.
+
+Known constraints:
+- Upload gate remains 100MB for Streamlit Cloud memory safety (current parser uses full-capture `rdpcap()` load, not streaming).
+- IP enrichment (reverse DNS / GeoIP / RDAP) scales with unique IP count, not file size, and can dominate runtime on high-diversity captures.
+- Future work: streaming parser refactor (`PcapReader`) to reduce memory ceiling pressure.
+
 ### Analysis Modes
 1.  **Upload PCAP**: Drag & drop any `.pcap` or `.pcapng` file. The dashboard runs the full analysis pipeline in the background.
 2.  **Auto-detect**: Loads pre-processed JSONs from the `outputs/` directory (great for sharing results).
