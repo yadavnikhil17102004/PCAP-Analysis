@@ -7,7 +7,18 @@ from scapy.all import rdpcap
 from scapy.layers.dns import DNS
 from scapy.layers.inet import IP
 
+from pcap_toolkit.analysis import analyze_pcap
 from pcap_toolkit.common import entropy, sld
+
+
+BENIGN_SUFFIXES = (".local", ".arpa", ".in-addr.arpa")
+
+
+def _is_benign_suffix(qname):
+    if not qname:
+        return False
+    lowered = qname.lower()
+    return any(lowered.endswith(suffix) for suffix in BENIGN_SUFFIXES)
 
 
 def _extract_answers(dns_pkt):
@@ -62,8 +73,17 @@ def _enrich_whois(domain):
 
 
 def run_deep_analysis(pcap_path, out_json=None):
+    base = analyze_pcap(pcap_path)
     packets = rdpcap(pcap_path)
-    results = {"packets_total": len(packets), "dns": [], "suspicious_slds": {}}
+    results = {
+        "packets_total": base["packets_total"],
+        "packet_counts": base.get("packet_counts", {}),
+        "tcp_count": base.get("tcp_count", 0),
+        "udp_count": base.get("udp_count", 0),
+        "icmp_count": base.get("icmp_count", 0),
+        "dns": [],
+        "suspicious_slds": {},
+    }
 
     for pkt in packets:
         try:
@@ -108,6 +128,8 @@ def run_deep_analysis(pcap_path, out_json=None):
     for top_domain, qname_list in sld_map.items():
         high_entropy_examples = []
         for qname in qname_list:
+            if _is_benign_suffix(qname):
+                continue
             label = qname.split(".")[0] if "." in qname else qname
             ent = entropy(label)
             if ent > 3.5 and len(label) > 10:

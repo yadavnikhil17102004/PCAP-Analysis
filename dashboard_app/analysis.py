@@ -6,6 +6,8 @@ from collections import Counter
 
 import pandas as pd
 
+from dns_heuristics import dga_score, score_dns_entropy
+
 QUERY_COLUMNS = [
     'time',
     'ts',
@@ -14,6 +16,8 @@ QUERY_COLUMNS = [
     'qname',
     'sld',
     'label_ent',
+    'entropy_score',
+    'known_benign_pattern',
     'dga_score',
     'severity',
     'tx_id',
@@ -24,10 +28,10 @@ BEACON_COLUMNS = ['src', 'sld', 'queries', 'interval_mean_s', 'jitter_cv', 'beac
 IP_COLUMNS = ['IP', 'Country', 'CountryCode', 'City', 'ISP', 'Org', 'ASN', 'ReverseDNS', 'Lat', 'Lon']
 
 SEVERITY_COLOR = {
-    "CRITICAL": "#ef4444",
-    "HIGH": "#f97316",
-    "MEDIUM": "#eab308",
-    "LOW": "#22c55e",
+    'CRITICAL': '#ef4444',
+    'HIGH': '#f97316',
+    'MEDIUM': '#eab308',
+    'LOW': '#22c55e',
 }
 
 
@@ -41,53 +45,24 @@ def _entropy(text: str) -> float:
 
 def _label_entropy(fqdn: str) -> float:
     """Entropy of leftmost label only — correct for DGA heuristics."""
-    return _entropy(fqdn.split(".")[0])
+    return _entropy(fqdn.split('.')[0])
 
 
 def _sld(fqdn: str) -> str:
-    parts = fqdn.rstrip(".").split(".")
-    return ".".join(parts[-2:]) if len(parts) >= 2 else fqdn
+    parts = fqdn.rstrip('.').split('.')
+    return '.'.join(parts[-2:]) if len(parts) >= 2 else fqdn
 
 
-def _dga_score(fqdn: str) -> float:
-    """
-    Heuristic DGA confidence 0.0–1.0.
-    Combines: label entropy, digit ratio, consonant runs, label count.
-    """
-    label = fqdn.split(".")[0]
-    if not label:
-        return 0.0
-    ent = _entropy(label)
-    digit_r = sum(c.isdigit() for c in label) / len(label)
-    vowels = sum(c in "aeiou" for c in label.lower())
-    vowel_r = vowels / len(label)
-    max_cons = 0
-    run = 0
-    for c in label.lower():
-        if c not in "aeiou" and c.isalpha():
-            run += 1
-            max_cons = max(max_cons, run)
-        else:
-            run = 0
-    num_labels = fqdn.count(".")
-    score = (
-        min(ent / 5.0, 1.0) * 0.45
-        + digit_r * 0.20
-        + (1.0 - vowel_r) * 0.15
-        + min(max_cons / 8.0, 1.0) * 0.10
-        + min(num_labels / 6.0, 1.0) * 0.10
-    )
-    return round(min(score, 1.0), 3)
-
-
-def _severity(score: float) -> str:
+def _severity(score: float | None) -> str:
+    if score is None:
+        return 'LOW'
     if score >= 0.70:
-        return "CRITICAL"
+        return 'CRITICAL'
     if score >= 0.50:
-        return "HIGH"
+        return 'HIGH'
     if score >= 0.30:
-        return "MEDIUM"
-    return "LOW"
+        return 'MEDIUM'
+    return 'LOW'
 
 
 def build_query_df(dns_records: list) -> pd.DataFrame:
@@ -104,7 +79,7 @@ def build_query_df(dns_records: list) -> pd.DataFrame:
         if r.get('qr') != 0:
             continue
         qname = _pick(r, 'qname', 'query', 'domain', default='')
-        dga = _dga_score(qname)
+        scored = score_dns_entropy(qname)
         ts = float(r.get('time', r.get('ts', 0)) or 0)
         rows.append({
             'time': pd.to_datetime(ts, unit='s'),
@@ -113,13 +88,14 @@ def build_query_df(dns_records: list) -> pd.DataFrame:
             'dst': _pick(r, 'dst', 'destination', 'dst_ip', 'server', default='unknown'),
             'qname': qname,
             'sld': _sld(qname),
-            'label_ent': round(_label_entropy(qname), 3),
-            'dga_score': dga,
-            'severity': _severity(dga),
+            'label_ent': round(_label_entropy(qname), 3) if scored['entropy_score'] is not None else None,
+            'entropy_score': scored['entropy_score'],
+            'known_benign_pattern': scored['known_benign_pattern'],
+            'dga_score': scored['dga_score'],
+            'severity': _severity(scored['dga_score']),
             'tx_id': r.get('id', r.get('tx_id', 0)),
         })
     return pd.DataFrame(rows, columns=QUERY_COLUMNS)
-
 
 
 def detect_beacons(df: pd.DataFrame) -> pd.DataFrame:
