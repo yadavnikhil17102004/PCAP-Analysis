@@ -302,6 +302,59 @@ def _inject_theme():
             border-radius: 14px;
             padding: 12px 14px;
         }
+
+        div[data-baseweb="tab-list"] {
+            overflow-x: auto;
+            scrollbar-width: thin;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        div[data-baseweb="tab-list"] button {
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 960px) {
+            .block-container {
+                padding-top: 0.85rem;
+                padding-bottom: 1rem;
+            }
+
+            .command-center {
+                position: static;
+                top: auto;
+                padding: 14px;
+                margin-bottom: 0.75rem;
+            }
+
+            .console-title {
+                font-size: 24px;
+            }
+
+            .console-subtitle {
+                font-size: 13px;
+            }
+
+            .workspace-dock,
+            .status-rail,
+            .alert-card {
+                border-radius: 14px;
+            }
+
+            .workspace-dock,
+            .status-rail {
+                padding: 12px;
+            }
+
+            div[data-testid="stHorizontalBlock"] {
+                gap: 0.65rem;
+            }
+
+            div[data-testid="column"] {
+                width: 100% !important;
+                flex: 1 1 100% !important;
+            }
+        }
         </style>
         """,
         unsafe_allow_html=True,
@@ -697,6 +750,7 @@ def _build_network_graph(query_df: pd.DataFrame, ip_df: pd.DataFrame, answer_map
             mode='markers+text',
             text=[label],
             textposition='bottom center',
+            textfont=dict(color='#e5eefc', size=11),
             marker=dict(size=22 if kind == 'Internal host' else 18, color=color, line=dict(color='white', width=1)),
             name=kind,
             hovertemplate=f'{kind}<br>%{{text}}<extra>{note}</extra>',
@@ -711,6 +765,7 @@ def _build_network_graph(query_df: pd.DataFrame, ip_df: pd.DataFrame, answer_map
         yaxis=dict(visible=False),
         height=360,
         margin=dict(l=0, r=0, t=10, b=0),
+        font=dict(color='#e5eefc'),
     )
     return fig
 
@@ -1056,13 +1111,14 @@ def _build_network_graph(query_df: pd.DataFrame, ip_df: pd.DataFrame, answer_map
             mode='markers+text',
             text=[label],
             textposition='bottom center',
+            textfont=dict(color='#e5eefc', size=11),
             marker=dict(size=22 if kind == 'Internal host' else 18, color=color, line=dict(color='white', width=1)),
             name=kind,
             hovertemplate=f'{kind}<br>%{{text}}<extra>{note}</extra>',
             showlegend=False,
         ))
 
-    fig.update_layout(title='', paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', xaxis=dict(visible=False), yaxis=dict(visible=False), height=360, margin=dict(l=0, r=0, t=10, b=0))
+    fig.update_layout(title='', paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', xaxis=dict(visible=False), yaxis=dict(visible=False), height=360, margin=dict(l=0, r=0, t=10, b=0), font=dict(color='#e5eefc'))
     return fig
 
 
@@ -1784,10 +1840,15 @@ def main():
 
     section_command_center(risk_ctx, deep, query_df, beacon_df, ip_df, answer_map, focus_domain, report_pkg)
 
-    tabs = st.tabs(['Investigation Timeline', 'Threat Intelligence', 'DNS Forensics', 'MITRE ATT&CK', 'Report & Export'])
+    st.info('Analysis loaded. Start with the report, then drill into supporting evidence in the tabs below.')
+
+    tabs = st.tabs(['Report & Export', 'Investigation Timeline', 'Threat Intelligence', 'DNS Forensics', 'MITRE ATT&CK'])
     with tabs[0]:
-        section_investigation_timeline(events)
+        section_ioc_export_center(report_pkg, query_df, ip_df)
+        section_final_report(report_pkg)
     with tabs[1]:
+        section_investigation_timeline(events)
+    with tabs[2]:
         col_graph, col_domain = st.columns([1.15, 0.85])
         with col_graph:
             section_network_intelligence_graph(query_df, ip_df, answer_map, focus_domain)
@@ -1795,14 +1856,10 @@ def main():
             section_domain_intelligence(query_df, ip_df, answer_map, focus_domain)
         st.markdown('---')
         section_geo_threat_map(ip_df)
-    with tabs[2]:
-        section_dns_forensics(query_df, deep, beacon_df)
     with tabs[3]:
-        section_mitre_matrix(query_df, beacon_df)
+        section_dns_forensics(query_df, deep, beacon_df)
     with tabs[4]:
-        section_ioc_export_center(report_pkg, query_df, ip_df)
-        with st.expander('Analyst summary', expanded=True):
-            section_final_report(report_pkg)
+        section_mitre_matrix(query_df, beacon_df)
 
 
 if __name__ == '__main__':
