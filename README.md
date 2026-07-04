@@ -1,8 +1,15 @@
 # 📡 PCAP Investigation Console
 
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://best-pcap-analyser.streamlit.app/)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/streamlit-1.30%2B-FF4B4B)](https://streamlit.io/)
+
 A **signal-first**, Python-based threat hunting dashboard for PCAP analysis. Detects **DNS tunneling**, **DGA domains**, **Beaconing C2 callbacks**, and **Geo-distributed infrastructure**.
 
-[![Watch the Demo](assets/demo/Screen_Recording.mov)](assets/demo/Screen_Recording.mov)
+**[Try it live →](https://best-pcap-analyser.streamlit.app/)**
+> First load may take 20-30s if idle (Streamlit Community Cloud free tier).
+
+![Dashboard Demo](assets/demo/demo.gif)
 
 ---
 
@@ -19,13 +26,23 @@ A **signal-first**, Python-based threat hunting dashboard for PCAP analysis. Det
 
 ---
 
+## Visual Overview
+
+| Command Center | Triage Queue + Timeline |
+| --- | --- |
+| ![Command center](assets/screenshots/command_center.png) | ![Triage queue and timeline](assets/screenshots/triage_queue_timeline.png) |
+
+| Investigation Timeline | Report & Export |
+| --- | --- |
+| ![Investigation timeline](assets/screenshots/investigation_timeline.png) | ![Report and export](assets/screenshots/export_panel.png) |
+
 ## 🛠 Installation
 
 Start by cloning the repository and setting up the environment:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/PCAP-Analysis.git
+git clone https://github.com/yadavnikhil17102004/PCAP-Analysis.git
 cd PCAP-Analysis
 
 # 2. Create a virtual environment
@@ -38,11 +55,22 @@ pip install -r requirements.txt
 
 ## 🖥 Usage
 
-Run the dashboard with a single command:
+Canonical flow:
+1. Clone the repo
+2. Install dependencies with `pip install -r requirements.txt`
+3. Launch the dashboard with:
 
 ```bash
 streamlit run dashboard.py
 ```
+
+The app opens with four load modes in the sidebar:
+- Demo example
+- Auto-detect existing output JSONs
+- Upload PCAP
+- Custom paths
+
+The bundled demo is the fastest way to validate the UI on a fresh clone.
 
 ## Performance
 
@@ -64,10 +92,6 @@ Known constraints:
 - Upload gate remains 100MB for Streamlit Cloud memory safety (current parser uses full-capture `rdpcap()` load, not streaming).
 - IP enrichment (reverse DNS / GeoIP / RDAP) scales with unique IP count, not file size, and can dominate runtime on high-diversity captures.
 - Future work: streaming parser refactor (`PcapReader`) to reduce memory ceiling pressure.
-
-### Analysis Modes
-1.  **Upload PCAP**: Drag & drop any `.pcap` or `.pcapng` file. The dashboard runs the full analysis pipeline in the background.
-2.  **Auto-detect**: Loads pre-processed JSONs from the `outputs/` directory (great for sharing results).
 
 
 ## 📂 Project Structure
@@ -99,14 +123,6 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Dashboard Inputs
-
-Default expected files:
-- `outputs/pcap_deeper_results.json`
-- `outputs/ip_enrichment_results.json`
-
-You can also provide custom JSON paths from the app setup panel.
-
 ## Faster Testing Without the UI
 
 Use the smoke-test helper to pull curated PCAP fixtures from `markofu/pcaps`, run the deep-analysis pipeline, and optionally run enrichment + dashboard parsing.
@@ -129,17 +145,6 @@ Built-in fixtures now cover a lot more than DNS-only captures:
 - Optional heavier samples like `slowdownload` and `80211traffic`
 
 Outputs land in `.cache/pcap-smoke/` so you can inspect the generated JSON/MD files later.
-
-## Launch Dashboard
-
-```bash
-streamlit run dashboard.py
-```
-
-Dashboard behavior:
-- Does not auto-load hidden defaults.
-- Prompts you to choose detected files or provide custom paths.
-- Loads data only after explicit confirmation.
 
 ## Archived Pipeline
 
