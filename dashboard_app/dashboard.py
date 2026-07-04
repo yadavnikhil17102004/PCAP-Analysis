@@ -1840,15 +1840,10 @@ def main():
 
     section_command_center(risk_ctx, deep, query_df, beacon_df, ip_df, answer_map, focus_domain, report_pkg)
 
-    st.info('Analysis loaded. Start with the report, then drill into supporting evidence in the tabs below.')
-
-    tabs = st.tabs(['Report & Export', 'Investigation Timeline', 'Threat Intelligence', 'DNS Forensics', 'MITRE ATT&CK'])
+    tabs = st.tabs(['Investigation Timeline', 'Threat Intelligence', 'DNS Forensics', 'MITRE ATT&CK', 'Report & Export'])
     with tabs[0]:
-        section_ioc_export_center(report_pkg, query_df, ip_df)
-        section_final_report(report_pkg)
-    with tabs[1]:
         section_investigation_timeline(events)
-    with tabs[2]:
+    with tabs[1]:
         col_graph, col_domain = st.columns([1.15, 0.85])
         with col_graph:
             section_network_intelligence_graph(query_df, ip_df, answer_map, focus_domain)
@@ -1856,10 +1851,14 @@ def main():
             section_domain_intelligence(query_df, ip_df, answer_map, focus_domain)
         st.markdown('---')
         section_geo_threat_map(ip_df)
-    with tabs[3]:
+    with tabs[2]:
         section_dns_forensics(query_df, deep, beacon_df)
-    with tabs[4]:
+    with tabs[3]:
         section_mitre_matrix(query_df, beacon_df)
+    with tabs[4]:
+        section_ioc_export_center(report_pkg, query_df, ip_df)
+        with st.expander('Analyst summary', expanded=True):
+            section_final_report(report_pkg)
 
 
 if __name__ == '__main__':
